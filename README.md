@@ -18,6 +18,10 @@ These Azure Functions copy files between storage accounts using a Service Bus qu
 5. Service Bus Namespace: *jposervicebus*
 	* Topic: *all_files*
 	* Subscription within this topic: *mysub*
+5. Cosmos DB Account
+    * Database name: jpo
+    * Collection Name: logdb
+
 
 ### Payload
 The payload for the message is a JSON file that provides the following controls:
@@ -50,9 +54,11 @@ Edit this localsettings.json file to replace your own. Replace <YOUR_KEY_HERE> w
     "jpovirginia": "DefaultEndpointsProtocol=https;AccountName=jpovirginia;AccountKey=<YOUR_KEY_HERE>;EndpointSuffix=core.usgovcloudapi.net",
     "jpoarizona": "DefaultEndpointsProtocol=https;AccountName=jpoarizona;AccountKey=<YOUR_KEY_HERE>;EndpointSuffix=core.usgovcloudapi.net",
     "jpoiowa": "DefaultEndpointsProtocol=https;AccountName=jpoiowa;AccountKey=<YOUR_KEY_HERE>;EndpointSuffix=core.usgovcloudapi.net",
+    "cosmosdb_log": "AccountEndpoint=<YOUR_KEY_HERE>",
     "FUNCTIONS_WORKER_RUNTIME": "dotnet",
     "outgoing_container": "outbox/",
-    "incoming_container": "inbox/"
+    "incoming_container": "inbox/",
+    "version": "0.2"
   }
 }
 </pre>

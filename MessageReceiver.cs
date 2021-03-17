@@ -15,7 +15,11 @@ using Funcs_DataMovement.Utils;
 namespace Funcs_DataMovement{
     public static class MessageReceiver {
         [FunctionName("MessageReceiver")]
-        public static void Run([ServiceBusTrigger("all_files", "mysub", Connection = "JPOServiceBus")]string sbmsg, ILogger log){
+        public static void Run([ServiceBusTrigger("all_files", "mysub", Connection = "JPOServiceBus")]string sbmsg, ILogger log,
+            [CosmosDB(
+                databaseName: "jpo",
+                collectionName: "logdb",
+                ConnectionStringSetting = "cosmosdb_log")]out dynamic document) {
             JPOFileInfo fileInfo = JsonConvert.DeserializeObject<JPOFileInfo>(sbmsg);
             string out_container = Environment.GetEnvironmentVariable("outgoing_container"); //Source Container name
             string in_container = Environment.GetEnvironmentVariable("incoming_container"); //Dest Container name
@@ -35,8 +39,17 @@ namespace Funcs_DataMovement{
 
             CopyBlobAsync(sourceContainer, destContainer, fileInfo.fileName).GetAwaiter().GetResult();
 
+            document = (new LogItem() {
+                destination = fileInfo.destination,
+                source = fileInfo.source,
+                fileName = fileInfo.fileName,
+                operation = "MessageReceiver",
+                timestamp = DateTime.Now,
+                version = Environment.GetEnvironmentVariable("version")
+
+            });
+
             log.LogInformation($"---- Received message: {JsonConvert.SerializeObject(fileInfo)}");
-            log.LogInformation("Got message");
         }
 
 
