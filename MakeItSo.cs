@@ -14,15 +14,9 @@ namespace Funcs_DataMovement {
     public static class MakeItSo {
         [FunctionName("MakeItSo")]
         public static IActionResult Run([HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req, ILogger log,
-            [ServiceBus("all_files", Connection = "JPOServiceBus", EntityType = EntityType.Queue)] out string queueMessage,
-           [CosmosDB(
-                databaseName: "jpo",
-                collectionName: "logdb",
-                ConnectionStringSetting = "cosmosdb_log")]out dynamic document) {
+           [ServiceBus("all_files", Connection = "JPOServiceBus", EntityType = EntityType.Queue)] out string queueMessage,
+           [CosmosDB(databaseName: "jpo", collectionName: "logdb",ConnectionStringSetting = "cosmosdb_log")] out dynamic document) {
             log.LogInformation("C# HTTP trigger function processed a request.");
-
-            //string command = req.Query["cmd"];
-
 
             string requestBody = String.Empty;
             using (StreamReader streamReader = new StreamReader(req.Body)) {
@@ -35,6 +29,7 @@ namespace Funcs_DataMovement {
                 fileName = fileInfo.fileName,
                 operation = "MakeItSo",
                 timestamp = DateTime.Now,
+                customerID = fileInfo.customerID,
                 version = Environment.GetEnvironmentVariable("version")
 
             }); 

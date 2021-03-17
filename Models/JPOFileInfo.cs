@@ -11,5 +11,6 @@ namespace Funcs_DataMovement.Models {
         public string fileName { get; set; }
         public DateTime date { get; set; }
         public string description { get; set; }
+        public string customerID { get; set; }
     }
 }

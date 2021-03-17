@@ -9,6 +9,7 @@ namespace Funcs_DataMovement.Models {
         public string destination { get; set; }
         public string fileName { get; set; }
         public DateTime timestamp { get; set; }
+        public string customerID { get; set; }
         public string version { get; set; }
     }
 }
