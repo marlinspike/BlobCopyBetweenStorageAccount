@@ -16,7 +16,7 @@ These Azure Functions copy files between storage accounts using a Service Bus qu
 
 ### localsettings.json
 Edit this localsettings.json file to replace your own. Replace <YOUR_KEY_HERE> with values from your deployed resources.
-`{
+{
     "IsEncrypted": false,
   "Values": {
     "AzureWebJobsStorage": "DefaultEndpointsProtocol=https;AccountName=jpodefault;AccountKey=<YOUR_KEY_HERE>;EndpointSuffix=core.usgovcloudapi.net", //DefaultEndpointsProtocol=https;AccountName=rcdev1;AccountKey=kaqcWkmMv+51mwlw19bnhu4+a7rk5YnzwcXHqvG1ambF3mF6jkzRQwUbvihoPh7+WL1p5V6YE15DoCKyk86IgQ==;BlobEndpoint=https://rcdev1.blob.core.windows.net/;TableEndpoint=https://rcdev1.table.core.windows.net/;QueueEndpoint=https://rcdev1.queue.core.windows.net/;FileEndpoint=https://rcdev1.file.core.windows.net/",
@@ -28,7 +28,7 @@ Edit this localsettings.json file to replace your own. Replace <YOUR_KEY_HERE> w
     "FUNCTIONS_WORKER_RUNTIME": "dotnet"
   }
 }
-`
+
 
 ### How to test
 Once running either locally or in Azure:
