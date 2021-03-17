@@ -83,3 +83,13 @@ Once running either locally or in Azure:
 3. Modify the *source* and *destination* here to be one of the values in the local.settings.json file (here it is jpovirginia, jpoarizona or jpoiowa)
 4. Send the Put request
 5. Verify that the file from the *inbox* container of the source storage account has been moved to the *outbox* container of the destination storage account
+
+### Screenshots
+## Flow
+![alt text](https://raw.githubusercontent.com/marlinspike/BlobCopyBetweenStorageAccount/master/img/JPOMessageHandling.png)
+
+## HTTP Put Request with JSON payload sent via Postman
+![alt text](https://raw.githubusercontent.com/marlinspike/BlobCopyBetweenStorageAccount/master/img/JSONRequest.png)
+
+## Storage Account
+![alt text](https://raw.githubusercontent.com/marlinspike/BlobCopyBetweenStorageAccount/master/img/StorageAccount.png)
