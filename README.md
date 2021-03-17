@@ -2,16 +2,22 @@
 These Azure Functions copy files between storage accounts using a Service Bus queue as a mediator
 
 ### Resources required 
-1. Storage Account for Azure Functions: jpodefault
+1. Storage Account for Azure Functions: *jpodefault*
 2. Origin Blob Storage:
-	* Storage Account for origin blobs: jpovirginia
-	* Container within this storage account for outgoing blobs: outbox
+	* Storage Account for origin blobs: *jpovirginia*
+    * Container within this storage account for incoming blobs: *inbox*
+	* Container within this storage account for outgoing blobs: *outbox*
 3. Destination Blob Storage
-	* Storage account for destination blobs: deststorage
-	* Container within this storage account for incoming blobs: inbox
-4. Service Bus Namespace: jposervicebus
-	* Topic: all_files
-	* Subscription within this topic: mysub
+	* Storage account for destination blobs: *jpoarizona*
+    * Container within this storage account for incoming blobs: *inbox*
+	* Container within this storage account for outgoing blobs: *outbox*
+4. Destination Blob Storage
+	* Storage account for destination blobs: *jpoiowa*
+    * Container within this storage account for incoming blobs: *inbox*
+	* Container within this storage account for outgoing blobs: *outbox*
+5. Service Bus Namespace: *jposervicebus*
+	* Topic: *all_files*
+	* Subscription within this topic: *mysub*
 
 ### Payload
 The payload for the message is a JSON file that provides the following controls:
@@ -39,11 +45,14 @@ Edit this localsettings.json file to replace your own. Replace <YOUR_KEY_HERE> w
   "Values": {
     "AzureWebJobsStorage": "DefaultEndpointsProtocol=https;AccountName=jpodefault;AccountKey=<YOUR_KEY_HERE>;EndpointSuffix=core.usgovcloudapi.net", //DefaultEndpointsProtocol=https;AccountName=rcdev1;AccountKey=kaqcWkmMv+51mwlw19bnhu4+a7rk5YnzwcXHqvG1ambF3mF6jkzRQwUbvihoPh7+WL1p5V6YE15DoCKyk86IgQ==;BlobEndpoint=https://rcdev1.blob.core.windows.net/;TableEndpoint=https://rcdev1.table.core.windows.net/;QueueEndpoint=https://rcdev1.queue.core.windows.net/;FileEndpoint=https://rcdev1.file.core.windows.net/",
     "AccountMonitored": "DefaultEndpointsProtocol=https;AccountName=jpovirginia;AccountKey=<YOUR_KEY_HERE>;EndpointSuffix=core.usgovcloudapi.net",
-    "JPOServiceBus": "Endpoint=sb://jposervicebus.servicebus.usgovcloudapi.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=<YOUR_KEY_HERE>",
+    "JPOServiceBus": "Endpoint=sb://jposervicebus.servicebus.usgovcloudapi.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey<YOUR_KEY_HERE>",
     "receive_topic": "Endpoint=sb://jposervicebus.servicebus.usgovcloudapi.net/;SharedAccessKeyName=receive;SharedAccessKey=<YOUR_KEY_HERE>",
-    "source_blob_account": "DefaultEndpointsProtocol=https;AccountName=jpovirginia;AccountKey=<YOUR_KEY_HERE>;EndpointSuffix=core.usgovcloudapi.net",
-    "dest_blob_account": "DefaultEndpointsProtocol=https;AccountName=deststorage;AccountKey=<YOUR_KEY_HERE>;EndpointSuffix=core.usgovcloudapi.net",
-    "FUNCTIONS_WORKER_RUNTIME": "dotnet"
+    "jpovirginia": "DefaultEndpointsProtocol=https;AccountName=jpovirginia;AccountKey=<YOUR_KEY_HERE>;EndpointSuffix=core.usgovcloudapi.net",
+    "jpoarizona": "DefaultEndpointsProtocol=https;AccountName=jpoarizona;AccountKey=<YOUR_KEY_HERE>;EndpointSuffix=core.usgovcloudapi.net",
+    "jpoiowa": "DefaultEndpointsProtocol=https;AccountName=jpoiowa;AccountKey=<YOUR_KEY_HERE>;EndpointSuffix=core.usgovcloudapi.net",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet",
+    "outgoing_container": "outbox/",
+    "incoming_container": "inbox/"
   }
 }
 </pre>

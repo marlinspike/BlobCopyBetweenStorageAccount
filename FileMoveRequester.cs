@@ -13,11 +13,11 @@ namespace Funcs_DataMovement
     public static class FileMoveRequester {
         [FunctionName("FileMoveRequester")]
         [return: ServiceBus("all_files", Connection = "JPOServiceBus")] 
-        public static string Run([BlobTrigger("outbox/{name}", Connection = "AccountMonitored")]Stream myBlob, string name, ILogger log){
+        public static string Run([BlobTrigger("outbox/{name}", Connection = "jpovirginia")]Stream myBlob, string name, ILogger log){
             log.LogInformation($"C# Blob trigger function Processed blob\n Name:{name} \n Size: {myBlob.Length} Bytes");
             var msg = new JPOFileInfo {
-                source = "outbox",
-                destination = "inbox",
+                source = "jpovirginia",
+                destination = "jpoiowa",//"jpoarizona",
                 tags = "tag1, tag2, tag3",
                 origin = "Elvis",
                 description = "Return to sender",

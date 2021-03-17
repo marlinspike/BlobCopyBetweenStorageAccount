@@ -12,24 +12,26 @@ using Azure;
 using Azure.Storage.Sas;
 using Funcs_DataMovement.Utils;
 
-namespace Funcs_DataMovement
-{
+namespace Funcs_DataMovement{
     public static class MessageReceiver {
         [FunctionName("MessageReceiver")]
         public static void Run([ServiceBusTrigger("all_files", "mysub", Connection = "JPOServiceBus")]string sbmsg, ILogger log){
             JPOFileInfo fileInfo = JsonConvert.DeserializeObject<JPOFileInfo>(sbmsg);
-            var sourceBlobAccount = Environment.GetEnvironmentVariable("source_blob_account"); //Dest Blob Account
-            var destBlobAccount = Environment.GetEnvironmentVariable("dest_blob_account"); //Dest Blob Account
+            string out_container = Environment.GetEnvironmentVariable("outgoing_container"); //Source Container name
+            string in_container = Environment.GetEnvironmentVariable("incoming_container"); //Dest Container name
+            
+            var sourceBlobAccount = Environment.GetEnvironmentVariable(fileInfo.source); //Source Blob Account
+            var destBlobAccount = Environment.GetEnvironmentVariable(fileInfo.destination); //Dest Blob Account
             var sourceClient = new BlobServiceClient(sourceBlobAccount);
             var destClient = new BlobServiceClient(destBlobAccount);
 
             //Get rererence to Source Blob
-            var sourceContainer = sourceClient.GetBlobContainerClient(fileInfo.source);
+            var sourceContainer = sourceClient.GetBlobContainerClient(out_container + fileInfo.source);
             var sourceBlob = sourceContainer.GetBlobClient(fileInfo.fileName);
-
+            
             //Get or Create a reference to destination Blob Container and Blob
-            var destContainer = destClient.GetBlobContainerClient(fileInfo.destination);
-            var destBlob = destContainer.GetBlobClient(fileInfo.fileName);
+            var destContainer = destClient.GetBlobContainerClient(in_container + fileInfo.destination);
+            var destBlob = destContainer.GetBlobClient(out_container + fileInfo.fileName);
 
             CopyBlobAsync(sourceContainer, destContainer, fileInfo.fileName).GetAwaiter().GetResult();
 
