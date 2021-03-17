@@ -70,12 +70,14 @@ Once running either locally or in Azure:
 <pre>
 {
 	"source":"jpoiowa",
-	"destination":"jpoarizona",
+	"destination":"jpovirginia",
 	"tags":"tag1, tag2, tag3",
-	"fileName":"Hello World.txt",
+	"fileName":"Hello World - 3.txt",
 	"date":"2021-03-17T09:55:46.9883908-04:00",
-	"description":"Hello from another geek!"
+	"description":"file transfer",
+	"customerID":"1"
 }
+
 </pre>
 3. Modify the *source* and *destination* here to be one of the values in the local.settings.json file (here it is jpovirginia, jpoarizona or jpoiowa)
 4. Send the Put request
