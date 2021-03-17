@@ -25,8 +25,11 @@ The payload for the message is a JSON file that provides the following controls:
         public DateTime date { get; set; }
         public string description { get; set; }
     }
-</pre>
-The tags can be used for managing flow.
+
+The tags can be used for managing flow. The JSON payload looks like:
+
+"{"source":"outbox","destination":"inbox","tags":"tag1, tag2, tag3","origin":"Elvis","fileName":"win10-vs.rdp","date":"2021-03-17T09:55:46.9883908-04:00","description":"Return to sender"}"
+
 
 ### localsettings.json
 Edit this localsettings.json file to replace your own. Replace <YOUR_KEY_HERE> with values from your deployed resources.
