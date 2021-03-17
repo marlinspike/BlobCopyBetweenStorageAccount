@@ -93,3 +93,7 @@ Once running either locally or in Azure:
 
 ## Storage Account
 ![alt text](https://raw.githubusercontent.com/marlinspike/BlobCopyBetweenStorageAccount/master/img/StorageAccount.png)
+
+## Storage Account
+Power BI Report
+![alt text](https://raw.githubusercontent.com/marlinspike/BlobCopyBetweenStorageAccount/master/img/jpo_pbi.jpg)
