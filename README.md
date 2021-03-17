@@ -59,8 +59,18 @@ Edit this localsettings.json file to replace your own. Replace <YOUR_KEY_HERE> w
 
 ### How to test
 Once running either locally or in Azure:
-* Upload a blob to Origin Blob Storage. FileMoveRequester fires and creates a message on the all_files topic
-* Message Receiver fires for each message and moves the file requested from origin to destination storage account. A Blob SAS token is created with a 1 hour ttl.
-
-
-
+1. Upload one or more blobs to the **inbox** Container in any of the Storage Accounts
+2. Use Postman or another tool configure a **PUT** request to the URL for the **MakeItSo** Function, and add the following JSON Payload:
+<pre>
+{
+	"source":"jpoiowa",
+	"destination":"jpoarizona",
+	"tags":"tag1, tag2, tag3",
+	"fileName":"Hello World.txt",
+	"date":"2021-03-17T09:55:46.9883908-04:00",
+	"description":"Hello from another geek!"
+}
+</pre>
+3. Modify the *source* and *destination* here to be one of the values in the local.settings.json file (here it is jpovirginia, jpoarizona or jpoiowa)
+4. Send the Put request
+5. Verify that the file from the *inbox* container of the source storage account has been moved to the *outbox* container of the destination storage account
