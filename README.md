@@ -13,6 +13,20 @@ These Azure Functions copy files between storage accounts using a Service Bus qu
 	* Topic: all_files
 	* Subscription within this topic: mysub
 
+### Payload
+The payload for the message is a JSON file that provides the following controls:
+<pre>
+    public class JPOFileInfo {
+        public string source { get; set; }  //Source Container Name
+        public string destination { get; set; } //Destination Container name
+        public string tags { get; set; }
+        public string origin { get; set; }
+        public string fileName { get; set; }
+        public DateTime date { get; set; }
+        public string description { get; set; }
+    }
+</pre>
+The tags can be used for managing flow.
 
 ### localsettings.json
 Edit this localsettings.json file to replace your own. Replace <YOUR_KEY_HERE> with values from your deployed resources.
