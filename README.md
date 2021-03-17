@@ -16,6 +16,7 @@ These Azure Functions copy files between storage accounts using a Service Bus qu
 
 ### localsettings.json
 Edit this localsettings.json file to replace your own. Replace <YOUR_KEY_HERE> with values from your deployed resources.
+<pre>
 {
     "IsEncrypted": false,
   "Values": {
@@ -28,7 +29,7 @@ Edit this localsettings.json file to replace your own. Replace <YOUR_KEY_HERE> w
     "FUNCTIONS_WORKER_RUNTIME": "dotnet"
   }
 }
-
+</pre>
 
 ### How to test
 Once running either locally or in Azure:
