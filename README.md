@@ -2,6 +2,8 @@
 These Azure Functions copy files between storage accounts using a Service Bus queue as a mediator
 
 ### Resources required 
+You can use the Azure CLI script (resources.azcli) in the *IaC* folder to deploy these resources via Azure CLI
+
 1. Storage Account for Azure Functions: *jpodefault*
 2. Origin Blob Storage:
 	* Storage Account for origin blobs: *jpovirginia*

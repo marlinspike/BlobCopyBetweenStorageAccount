@@ -1,0 +1,24 @@
+﻿//This CLI script creates the resources necessary. 
+//To deploy the Function App to Azure, you'd need a Function App, which you can create via VSCode or Visual Studio
+
+//Resource Group
+az group create --location usgovvirginia --name jpo
+
+//Storage Account
+az storage account create --name jpodefault --resource-group jpo --location usgovvirginia
+az storage account create --name jpovirginia --resource-group jpo --location usgovvirginia
+az storage account create --name jpoiowa --resource-group jpo --location usgoviowa
+az storage account create --name jpoarizona --resource-group jpo --location usgovarizona
+
+//CosmosDB
+az cosmosdb create --name cosmosjpo --resource-group jpo
+az cosmosdb database create --name cosmosjpo --resource-group jpo --db-name jdb
+az cosmosdb sql container create --name logdb --database-name cosmosjpo --resource-group jpo --partition-key-path "/customerID" --account-name  jdb
+
+//Service Bus
+az servicebus namespace create --resource-group jpo --name jposervicebus --location usgovvirginia
+az servicebus queue create --resource-group jpo --namespace-name jposervicebus --name qsend
+az servicebus topic create --name all_files --namespace-name jposervicebus --resource-group jpo
+az servicebus topic subscription create --name mysub --namespace-name jposervicebus  --topic-name all_files --resource-group jpo 
+
+
