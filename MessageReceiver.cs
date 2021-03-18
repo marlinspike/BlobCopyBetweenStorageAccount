@@ -11,6 +11,8 @@ using System.Threading.Tasks;
 using Azure;
 using Azure.Storage.Sas;
 using Funcs_DataMovement.Utils;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Funcs_DataMovement{
     public static class MessageReceiver {
@@ -35,7 +37,7 @@ namespace Funcs_DataMovement{
             var destContainer = destClient.GetBlobContainerClient(in_container + fileInfo.destination);
             var destBlob = destContainer.GetBlobClient(out_container + fileInfo.fileName);
 
-            CopyBlobAsync(sourceContainer, destContainer, fileInfo.fileName).GetAwaiter().GetResult();
+            CopyBlobAsync(sourceContainer, destContainer, fileInfo).GetAwaiter().GetResult();
 
             document = (new LogItem() {
                 destination = fileInfo.destination,
@@ -44,6 +46,7 @@ namespace Funcs_DataMovement{
                 operation = "MessageReceiver",
                 timestamp = DateTime.Now,
                 customerID = fileInfo.customerID,
+                tags = fileInfo.tags,
                 version = Environment.GetEnvironmentVariable("version")
             });
 
@@ -51,10 +54,10 @@ namespace Funcs_DataMovement{
         }
 
 
-        private static async Task CopyBlobAsync(BlobContainerClient container, BlobContainerClient destContainer, string sourceBlobName) {
+        private static async Task CopyBlobAsync(BlobContainerClient container, BlobContainerClient destContainer, JPOFileInfo fileInfo) {
             try {
                 // Get the name of the first blob in the container to use as the source.
-                string blobName = sourceBlobName;
+                string blobName = fileInfo.fileName;
 
                 // Create a BlobClient representing the source blob to copy.
                 BlobClient sourceBlob = container.GetBlobClient(blobName);
@@ -74,10 +77,20 @@ namespace Funcs_DataMovement{
                     Uri blob_sas_uri = BlobUtilities.GetServiceSASUriForBlob(sourceBlob, container.Name, null);
 
                     // Get a BlobClient representing the destination blob
-                    BlobClient destBlob = destContainer.GetBlobClient(sourceBlobName);//destContainer.GetBlobClient(blob_sas_uri.ToString());
+                    BlobClient destBlob = destContainer.GetBlobClient(fileInfo.fileName);//destContainer.GetBlobClient(blob_sas_uri.ToString());
 
+                    var dict = new Dictionary<string, string>();
+                    foreach (var (tag, index) in fileInfo.tags.Split(",").WithIndex()) {
+                        dict.Add($"tag{index}", tag.Trim());
+                    }
+                    dict.Add("source", fileInfo.source);
+                    dict.Add("description", fileInfo.description);
+                    var options = new BlobCopyFromUriOptions {
+                        Metadata = dict
+                    };
+  
                     // Start the copy operation.
-                    await destBlob.StartCopyFromUriAsync(blob_sas_uri);
+                    await destBlob.StartCopyFromUriAsync(blob_sas_uri, options);
 
                     // Get the destination blob's properties and display the copy status.
                     BlobProperties destProperties = await destBlob.GetPropertiesAsync();
@@ -98,6 +111,9 @@ namespace Funcs_DataMovement{
                 Console.ReadLine();
                 throw;
             }
+        }
+        public static IEnumerable<(T item, int index)> WithIndex<T>(this IEnumerable<T> source) {
+            return source.Select((item, index) => (item, index));
         }
     }
 

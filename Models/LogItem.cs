@@ -10,6 +10,11 @@ namespace Funcs_DataMovement.Models {
         public string fileName { get; set; }
         public DateTime timestamp { get; set; }
         public string customerID { get; set; }
+        public string tags { get; set; }
         public string version { get; set; }
+
+        public Dictionary<string, string> getTags() {
+            return null;
+        }
     }
 }

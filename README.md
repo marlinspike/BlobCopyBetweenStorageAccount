@@ -83,6 +83,8 @@ Once running either locally or in Azure:
 3. Modify the *source* and *destination* here to be one of the values in the local.settings.json file (here it is jpovirginia, jpoarizona or jpoiowa)
 4. Send the Put request
 5. Verify that the file from the *inbox* container of the source storage account has been moved to the *outbox* container of the destination storage account
+6. Verify that the tags have been appended to the blobs's metadata. 
+7. Verify that the blob metadata contains the 'source' tag
 
 ### Screenshots
 ## Flow
