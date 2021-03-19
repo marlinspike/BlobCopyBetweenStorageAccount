@@ -17,9 +17,9 @@ using System.Linq;
 namespace Funcs_DataMovement{
     public static class MessageReceiver {
         [FunctionName("MessageReceiver")]
-        public static void Run(
-            [ServiceBusTrigger("all_files", "mysub", Connection = "JPOServiceBus")] string sbmsg, ILogger log,
-            [CosmosDB( databaseName: "jpo",collectionName: "logdb", ConnectionStringSetting = "cosmosdb_log")] out dynamic document) {
+        [return: CosmosDB(databaseName: "jpo", collectionName: "logdb", ConnectionStringSetting = "cosmosdb_log")]
+        public static async Task<LogItem>  Run(
+            [ServiceBusTrigger("all_files", "mysub", Connection = "JPOServiceBus")] string sbmsg, ILogger log) {
             JPOFileInfo fileInfo = JsonConvert.DeserializeObject<JPOFileInfo>(sbmsg);
             string out_container = Environment.GetEnvironmentVariable("outgoing_container"); //Source Container name
             string in_container = Environment.GetEnvironmentVariable("incoming_container"); //Dest Container name
@@ -37,9 +37,9 @@ namespace Funcs_DataMovement{
             var destContainer = destClient.GetBlobContainerClient(in_container + fileInfo.destination);
             var destBlob = destContainer.GetBlobClient(out_container + fileInfo.fileName);
 
-            CopyBlobAsync(sourceContainer, destContainer, fileInfo).GetAwaiter().GetResult();
+            await CopyBlobAsync(sourceContainer, destContainer, fileInfo);
 
-            document = (new LogItem() {
+            var document = (new LogItem() {
                 destination = fileInfo.destination,
                 source = fileInfo.source,
                 fileName = fileInfo.fileName,
@@ -51,6 +51,7 @@ namespace Funcs_DataMovement{
             });
 
             log.LogInformation($"---- Received message: {JsonConvert.SerializeObject(fileInfo)}");
+            return document;
         }
 
 
