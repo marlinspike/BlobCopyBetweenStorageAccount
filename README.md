@@ -93,11 +93,17 @@ Once running either locally or in Azure:
 ![alt text](https://raw.githubusercontent.com/marlinspike/BlobCopyBetweenStorageAccount/master/img/JPOMessageHandling.png)
 
 ## HTTP Put Request with JSON payload sent via Postman
+The client here is Postman, but it could be any app that can make an HTTPS PUT Request with a JSON Payload
 ![alt text](https://raw.githubusercontent.com/marlinspike/BlobCopyBetweenStorageAccount/master/img/JSONRequest.png)
 
 ## Storage Account
 ![alt text](https://raw.githubusercontent.com/marlinspike/BlobCopyBetweenStorageAccount/master/img/StorageAccount.png)
 
+## Blob Metadata
+The metadata for the copied blob is set with the *Tags* specified in the JSON Request, as well as the *Source* and *Description* passed.
+![alt text](https://raw.githubusercontent.com/marlinspike/BlobCopyBetweenStorageAccount/master/img/blob-metadata.png)
+
+
 ## Storage Account
-Power BI Report
+This Power BI Dashboard is built off live-time Cosmos DB data. 
 ![alt text](https://raw.githubusercontent.com/marlinspike/BlobCopyBetweenStorageAccount/master/img/jpo_pbi.jpg)
