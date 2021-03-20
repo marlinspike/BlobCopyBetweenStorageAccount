@@ -11,10 +11,9 @@ namespace Funcs_DataMovement.Models {
         public DateTime timestamp { get; set; }
         public string customerID { get; set; }
         public string tags { get; set; }
+        public string correlationID { get; set; }
         public string version { get; set; }
 
-        public Dictionary<string, string> getTags() {
-            return null;
-        }
+
     }
 }

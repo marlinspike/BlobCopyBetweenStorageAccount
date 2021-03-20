@@ -11,6 +11,7 @@ namespace Funcs_DataMovement.Models {
         public string fileName { get; set; } = "";
         public DateTime date { get; set; } = DateTime.Now;
         public string description { get; set; } = "";
+        public string correlationID { get; set; } = "";
         public string customerID { get; set; } = "";
     }
 }

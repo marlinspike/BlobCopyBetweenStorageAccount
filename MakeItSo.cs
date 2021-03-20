@@ -16,6 +16,7 @@ namespace Funcs_DataMovement {
         public static IActionResult Run([HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req, ILogger log,
            [ServiceBus("all_files", Connection = "JPOServiceBus", EntityType = EntityType.Queue)] out string queueMessage,
            [CosmosDB(databaseName: "jpo", collectionName: "logdb",ConnectionStringSetting = "cosmosdb_log")] out dynamic document) {
+            string guid = Guid.NewGuid().ToString();
             log.LogInformation("C# HTTP trigger function processed a request.");
 
             string requestBody = String.Empty;
@@ -23,20 +24,22 @@ namespace Funcs_DataMovement {
                 requestBody =  streamReader.ReadToEnd();
             }
             JPOFileInfo fileInfo = JsonConvert.DeserializeObject<JPOFileInfo>(requestBody);
-            document = (new LogItem() {
+            document = new LogItem() {
                 destination = fileInfo.destination,
                 source = fileInfo.source,
                 fileName = fileInfo.fileName,
                 operation = "MakeItSo",
                 timestamp = DateTime.Now,
                 customerID = fileInfo.customerID,
+                correlationID =guid,
                 version = Environment.GetEnvironmentVariable("version")
 
-            }); 
+            };
+            fileInfo.correlationID = guid;
 
             queueMessage = JsonConvert.SerializeObject(fileInfo);
 
-            return new OkObjectResult("GotIt!");
+            return new OkObjectResult($"CorrelationID: {guid}");
         }
     }
 }

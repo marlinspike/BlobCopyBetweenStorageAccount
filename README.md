@@ -1,5 +1,8 @@
 ﻿## Copy Blobs using a Service Bus Queue Mediator
-These Azure Functions copy files between storage accounts using a Service Bus queue as a mediator
+These Azure Functions copy files between storage accounts using a Service Bus queue as a mediator. Some traceability and features are included:
+* Tracking correlationID from submission of the JSON Request to CosmosDB to finally the Blob's metadata in the copied Storage Account
+* Tracking the Source of the reuquest in CosmosDB as well as Blob Metadata
+* Cosmos DB is configured to partition by CustomerID, allowing efficient queries by customer
 
 ### Resources required 
 You can use the Azure CLI script (resources.azcli) in the *IaC* folder to deploy these resources via Azure CLI
@@ -29,14 +32,15 @@ You can use the Azure CLI script (resources.azcli) in the *IaC* folder to deploy
 The payload for the message is a JSON file that provides the following controls:
 <pre>
     public class JPOFileInfo {
-        public string source { get; set; }  //Source Container Name
-        public string destination { get; set; } //Destination Container name
-        public string tags { get; set; }
-        public string origin { get; set; }
-        public string fileName { get; set; }
-        public DateTime date { get; set; }
-        public string description { get; set; }
-        public string customerID { get; set; }
+        public string source { get; set; } = "";  //Source Container Name
+        public string destination { get; set; } = ""; //Destination Container name
+        public string tags { get; set; } = "";
+        public string origin { get; set; } = "";
+        public string fileName { get; set; } = "";
+        public DateTime date { get; set; } = DateTime.Now;
+        public string description { get; set; } = "";
+        public string correlationID { get; set; } = "";
+        public string customerID { get; set; } = "";
     }
 </pre>
 The tags can be used for managing flow. The JSON payload looks like:
@@ -84,9 +88,10 @@ Once running either locally or in Azure:
 </pre>
 3. Modify the *source* and *destination* here to be one of the values in the local.settings.json file (here it is jpovirginia, jpoarizona or jpoiowa)
 4. Send the Put request
-5. Verify that the file from the *inbox* container of the source storage account has been moved to the *outbox* container of the destination storage account
-6. Verify that the tags have been appended to the blobs's metadata. 
-7. Verify that the blob metadata contains the 'source' tag
+5. See that the file from the *inbox* container of the source storage account has been moved to the *outbox* container of the destination storage account
+6. See that the tags have been appended to the blobs's metadata. 
+7. See that the blob metadata contains the 'source' tag
+8. See that the corrlationID returned by the MakeItSo Function matches logs in Cosmos DB as well as the related Blob Metadata
 
 ### Screenshots
 ## Flow

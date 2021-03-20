@@ -39,16 +39,17 @@ namespace Funcs_DataMovement{
 
             await CopyBlobAsync(sourceContainer, destContainer, fileInfo);
 
-            var document = (new LogItem() {
+            var document = new LogItem() {
                 destination = fileInfo.destination,
                 source = fileInfo.source,
                 fileName = fileInfo.fileName,
                 operation = "MessageReceiver",
                 timestamp = DateTime.Now,
                 customerID = fileInfo.customerID,
+                correlationID = fileInfo.correlationID,
                 tags = fileInfo.tags,
                 version = Environment.GetEnvironmentVariable("version")
-            });
+            };
 
             log.LogInformation($"---- Received message: {JsonConvert.SerializeObject(fileInfo)}");
             return document;
@@ -84,6 +85,7 @@ namespace Funcs_DataMovement{
                     foreach (var (tag, index) in fileInfo.tags.Split(",").WithIndex()) {
                         dict.Add($"tag{index}", tag.Trim());
                     }
+                    dict.Add("correlationID", fileInfo.correlationID);
                     dict.Add("source", fileInfo.source);
                     dict.Add("description", fileInfo.description);
                     var options = new BlobCopyFromUriOptions {
